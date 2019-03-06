@@ -1,21 +1,36 @@
 /* @flow */
 
-export type BytesR = Uint8Array;
+type uint = number;
+type u8 = number;
 
-/* TODO: Uncomment when indexer variance gets fixed in Flow
-export interface BytesR {
-  +[position: uint]: u8;
-  subarray(begin: uint, end: uint): BytesR;
+type Arrayish = {
+  +length: uint,
+  ...,
+};
+
+export opaque type BytesR: Arrayish = Uint8Array;
+export opaque type BytesB: BytesR = Uint8Array;
+
+export function create(length: uint): BytesB { // eslint-disable-line no-shadow
+  return new Uint8Array(length);
 }
-*/
 
-export type BytesB = Uint8Array;
-
-/* TODO: Uncomment when indexer variance gets fixed in Flow
-export interface BytesB extends BytesR {
-  [position: uint]: u8;
-  subarray(begin: uint, end: uint): BytesB;
-  fill(value: u8, begin: uint, end: uint): void;
-  set(source: BytesR, offset: uint): void;
+export function get(offset: uint, bytes: BytesR): u8 {
+  return bytes[offset];
 }
-*/
+
+export function set(value: uint, offset: uint, bytes: BytesB): void {
+  bytes[offset] = value;
+}
+
+export function getSubarray<T: BytesR>(begin: uint, end: uint, bytes: T): T {
+  return bytes.subarray(begin, end);
+}
+
+export function setSubarray(source: BytesR, offset: uint, target: BytesB): void {
+  target.set(source, offset);
+}
+
+export function fill(value: u8, begin: uint, end: uint, bytes: BytesB): void {
+  bytes.fill(value, begin, end);
+}
