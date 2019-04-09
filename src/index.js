@@ -15,6 +15,14 @@ export function create(length: uint): BytesB { // eslint-disable-line no-shadow
   return new Uint8Array(length);
 }
 
+export function unmask(bytes: BytesB): Uint8Array {
+  return bytes;
+}
+
+export function unsafeUnmask(bytes: BytesR): Uint8Array {
+  return bytes;
+}
+
 export function get(offset: uint, bytes: BytesR): u8 {
   return bytes[offset];
 }
